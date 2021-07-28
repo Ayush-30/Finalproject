@@ -39,7 +39,7 @@ def forum(request):
     except:
         page = 1
     questions = paginator.get_page(page)
-    context = {'u_form': u_form, 'q': questions}
+    context = {'u_form': u_form, 'q': questions,'user':user}
     return render(request, 'forum/dashboard.html', context)
 
 
@@ -128,15 +128,16 @@ def viewquestion(request, question_id):
     recom[['NQuestion View Count', 'NQuestion Answer Count']] = recom_normalized_df
     recom['score'] = recom['NQuestion View Count'] * 0.5 + recom['NQuestion Answer Count'] * 0.5
     recom = recom.sort_values(['score'], ascending=False)
-    print(recom)
+    # print(recom)
     test = recom.sort_values(['score'], ascending=[False])
-    print(test)
+    # print(test)
     recom.rename(columns={'question_view_count': 'QuestionViewCount'}, inplace=True)
     recom = recom.drop_duplicates(['id', 'question_content'])
     recom_pivot = recom.pivot(index='id', columns='question_content', values='score')
     recom_pivot.fillna(0, inplace=True)
     print(recom_pivot)
     recom_matrix = csr_matrix(recom_pivot.values)
+    print(recom_matrix)
     recom_pivot.reset_index(inplace=True)
     model_knn = NearestNeighbors(metric='cosine', algorithm='brute')
     model_knn.fit(recom_matrix)
@@ -160,7 +161,7 @@ def viewquestion(request, question_id):
         df = pd.DataFrame(recommend_frame, index=range(1, n_movies_to_reccomend + 1))
         print(df)
         df.sort_values('Distance', ascending=False, inplace=True)
-        output = df[1:].head(10)
+        output = df[1:].head(20)
         json_record = output.reset_index().to_json(orient='records')
         data = json.loads(json_record)
 
@@ -174,7 +175,7 @@ def viewquestion(request, question_id):
 def myposts(request):
     q = QuestionPost.objects.filter(posted_by=request.user)
 
-    paginator = Paginator(q, 2)
+    paginator = Paginator(q, 5)
     try:
         page = int(request.GET.get('page', '1'))
     except:
@@ -188,7 +189,7 @@ def UserPostListView(request, username):
     q = QuestionPost.objects.filter(posted_by=m)
     user = request.user
     if str(user) != str(username):
-        paginator = Paginator(q, 2)
+        paginator = Paginator(q, 5)
         try:
             page = int(request.GET.get('page', '1'))
         except:
@@ -220,11 +221,11 @@ def search1(request):
         content = {'q': question}
         return render(request, 'user/search.html', content)
     else:
-        allposttitle = QuestionPost.objects.filter(Q(question_content__icontains=query))
-        allpostauthorsem = QuestionPost.objects.filter(Q(question_author_semester__icontains=query))
+        allposttitle = QuestionPost.objects.filter(Q(question_content__icontains=query) | Q(question_author_semester__icontains=query))
+        allpostauthorsem = QuestionPost.objects.filter(Q(posted_by__username__icontains=query))
         allpostsubject = QuestionPost.objects.filter(Q(question_subject__icontains=query))
         question = allposttitle.union(allpostauthorsem, allpostsubject)
-        paginator = Paginator(question, 2)
+        paginator = Paginator(question, 5)
         try:
             page = int(request.GET.get('page', '1'))
         except:

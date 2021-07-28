@@ -2,20 +2,6 @@
 {% load static %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-      <title>New Question</title>
-      <link rel="icon" type="image/png" href="{% static 'img/geekhub.png' %}"/>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-     <link href="{% static 'css/library/bootstrapmin.css' %}" rel="stylesheet" type="text/css" media="screen, projection"/>
-    <link href="{% static 'css/library/stylesheet.css' %}" rel="stylesheet" type="text/css" media="screen, projection" />
-    <link href="{% static 'css/library/colours.css' %}" rel="stylesheet" type="text/css" media="screen, projection" />
-    <link href="{% static 'css/library/lib.css'  %}" rel="stylesheet" type="text/css" media="screen,projection" />
-    <link href="{% static 'css/library/style.css' %}" rel="stylesheet">
-
-</head>
 {% include "forum/message.html" %}
 <body>
  <main id="tt-pageContent">
@@ -62,7 +48,7 @@
                                 <div class="col-auto ml-md-auto">
 <!--                                    <a href="{% url 'newquestion' %}" onclick="document.getElementById[newquestion].submit();" class="btn btn-secondary btn-width-lg">-->
 <!--                                    Create Post</a>-->
-                                        <button type="submit" class="button font-icon"  style="width:40%;" >Submit</button>
+                                        <button type="submit" class="button font-icon" >Submit</button>
                                 </div>
                             </div>
                         </div>

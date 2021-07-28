@@ -603,6 +603,7 @@ pre {
 }
 
 img {
+	width: 100%;
 	vertical-align: middle;
 	border-style: none
 }
@@ -6002,6 +6003,7 @@ hr {
 
 #tt-header .tt-logo+* {
 	margin-left: 45px
+
 }
 
 @media (max-width:1229px) {
@@ -6015,10 +6017,8 @@ hr {
 		margin-left: 10px
 	}
 }
-
 #tt-header .tt-logo img {
-	max-width: 36px;
-	height: auto
+	max-width: 150px;
 }
 
 #tt-header .tt-desktop-menu+* {
